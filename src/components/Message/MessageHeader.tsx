@@ -7,17 +7,19 @@ interface MessageHeaderProps {
   participant: TParticipant;
   timestamp: number;
   showHeader: boolean | undefined;
+  isCurrentUser: boolean;
 }
 
 export const MessageHeader: React.FC<MessageHeaderProps> = ({
   participant,
   timestamp,
   showHeader,
+  isCurrentUser,
 }) => {
   if (!showHeader) return null;
 
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, isCurrentUser && styles.headerRight]}>
       <Image source={{ uri: participant.avatarUrl }} style={styles.avatar} />
       <Text style={styles.name}>{participant.name}</Text>
       <Text style={styles.time}>{format(timestamp, "h:mm a")}</Text>
@@ -31,6 +33,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 4,
   },
+  headerRight: {
+    justifyContent: "flex-end",
+  },
   avatar: {
     width: 24,
     height: 24,
@@ -41,9 +46,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 14,
     color: "#000",
+    marginRight: 8,
   },
   time: {
-    marginLeft: 8,
     fontSize: 12,
     color: "#666",
   },

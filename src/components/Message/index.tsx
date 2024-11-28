@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { MessageHeader } from "./MessageHeader";
 import { MessageReactions } from "./MessageReactions";
+import { MessageAttachments } from "./MessageAttachments";
 
 interface MessageProps {
   message: TMessageWithUI;
@@ -27,21 +28,29 @@ export const Message: React.FC<MessageProps> = ({
       />
 
       <View>
-        <View style={[styles.bubble, isCurrentUser && styles.bubbleRight]}>
-          <Text style={[styles.text, isCurrentUser && styles.textRight]}>
-            {message.text}
-          </Text>
-          {isEdited && (
-            <Text
-              style={[
-                styles.editedText,
-                isCurrentUser && styles.editedTextRight,
-              ]}
-            >
-              (edited)
+        {message.text && (
+          <View style={[styles.bubble, isCurrentUser && styles.bubbleRight]}>
+            <Text style={[styles.text, isCurrentUser && styles.textRight]}>
+              {message.text}
             </Text>
-          )}
-        </View>
+            {isEdited && (
+              <Text
+                style={[
+                  styles.editedText,
+                  isCurrentUser && styles.editedTextRight,
+                ]}
+              >
+                (edited)
+              </Text>
+            )}
+          </View>
+        )}
+        
+        <MessageAttachments
+          attachments={message.attachments}
+          isCurrentUser={isCurrentUser}
+        />
+        
         <MessageReactions
           reactions={message.reactions}
           isCurrentUser={isCurrentUser}

@@ -34,6 +34,11 @@ type TMessage = {
   updatedAt: number;
 };
 
+type TServerInfo = {
+  sessionUuid: string;
+  apiVersion: number;
+};
+
 type TMessageJSON = Omit<TMessage, "replyToMessageUuid"> & {
   replyToMessage?: Omit<TMessage, "replyToMessageUuid">;
 };

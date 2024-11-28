@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { MessageHeader } from "./MessageHeader";
+import { MessageReactions } from "./MessageReactions";
 
 interface MessageProps {
   message: TMessage;
@@ -24,6 +25,7 @@ export const Message: React.FC<MessageProps> = ({
       <View style={styles.bubble}>
         <Text style={styles.text}>{message.text}</Text>
       </View>
+      <MessageReactions reactions={message.reactions} />
     </View>
   );
 };

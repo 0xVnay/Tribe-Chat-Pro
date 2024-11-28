@@ -14,6 +14,8 @@ export const Message: React.FC<MessageProps> = ({
   participant,
   showHeader,
 }) => {
+  const isEdited = message.updatedAt > message.sentAt;
+
   return (
     <View style={styles.container}>
       <MessageHeader
@@ -22,10 +24,13 @@ export const Message: React.FC<MessageProps> = ({
         showHeader={showHeader}
       />
 
-      <View style={styles.bubble}>
-        <Text style={styles.text}>{message.text}</Text>
+      <View>
+        <View style={styles.bubble}>
+          <Text style={styles.text}>{message.text}</Text>
+          {isEdited && <Text style={styles.editedText}>(edited)</Text>}
+        </View>
+        <MessageReactions reactions={message.reactions} />
       </View>
-      <MessageReactions reactions={message.reactions} />
     </View>
   );
 };
@@ -45,5 +50,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: "#000",
+  },
+  editedText: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 4,
   },
 });

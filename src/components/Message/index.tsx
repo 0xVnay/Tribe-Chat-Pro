@@ -42,7 +42,10 @@ export const Message: React.FC<MessageProps> = ({
             </Text>
           )}
         </View>
-        <MessageReactions reactions={message.reactions} />
+        <MessageReactions
+          reactions={message.reactions}
+          isCurrentUser={isCurrentUser}
+        />
       </View>
     </View>
   );

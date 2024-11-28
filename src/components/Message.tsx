@@ -5,12 +5,21 @@ import { MessageHeader } from "./MessageHeader";
 interface MessageProps {
   message: TMessage;
   participant: TParticipant;
+  showHeader: boolean | undefined;
 }
 
-export const Message: React.FC<MessageProps> = ({ message, participant }) => {
+export const Message: React.FC<MessageProps> = ({
+  message,
+  participant,
+  showHeader,
+}) => {
   return (
     <View style={styles.container}>
-      <MessageHeader participant={participant} timestamp={message.sentAt} />
+      <MessageHeader
+        participant={participant}
+        timestamp={message.sentAt}
+        showHeader={showHeader}
+      />
 
       <View style={styles.bubble}>
         <Text style={styles.text}>{message.text}</Text>

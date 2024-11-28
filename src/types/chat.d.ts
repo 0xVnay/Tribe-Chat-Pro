@@ -34,6 +34,10 @@ type TMessage = {
   updatedAt: number;
 };
 
+interface TMessageWithUI extends TMessage {
+  showHeader?: boolean;
+}
+
 type TServerInfo = {
   sessionUuid: string;
   apiVersion: number;

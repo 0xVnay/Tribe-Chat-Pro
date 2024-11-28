@@ -6,12 +6,16 @@ import { format } from "date-fns";
 interface MessageHeaderProps {
   participant: TParticipant;
   timestamp: number;
+  showHeader: boolean | undefined;
 }
 
 export const MessageHeader: React.FC<MessageHeaderProps> = ({
   participant,
   timestamp,
+  showHeader,
 }) => {
+  if (!showHeader) return null;
+
   return (
     <View style={styles.header}>
       <Image source={{ uri: participant.avatarUrl }} style={styles.avatar} />

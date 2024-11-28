@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useChat } from "../hooks/useChat";
 import { Message } from "./Message";
@@ -6,18 +6,37 @@ import { Message } from "./Message";
 export const MessageList: React.FC = () => {
   const { messages, participants } = useChat();
 
-  const renderMessage = ({ item: message }: { item: TMessage }) => {
+  const groupedMessages = useMemo(() => {
+    return messages.map((message, index) => {
+      const prevMessage = messages[index + 1];
+      const showHeader =
+        !prevMessage || prevMessage.authorUuid !== message.authorUuid;
+
+      return {
+        ...message,
+        showHeader,
+      };
+    });
+  }, [messages]);
+
+  const renderMessage = ({ item: message }: { item: TMessageWithUI }) => {
     const participant = participants.find((p) => p.uuid === message.authorUuid);
 
     if (!participant) return null;
 
-    return <Message message={message} participant={participant} />;
+    return (
+      <Message
+        message={message}
+        participant={participant}
+        showHeader={message.showHeader}
+      />
+    );
   };
 
   return (
     <FlatList
       style={styles.container}
-      data={messages}
+      data={groupedMessages}
       renderItem={renderMessage}
       keyExtractor={(item) => item.uuid}
       inverted

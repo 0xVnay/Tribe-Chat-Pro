@@ -1,7 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { format } from "date-fns";
+import { ParticipantDetails } from "../BottomSheets/ParticipantDetails";
+import { useBottomSheet } from "../../hooks/useBottomSheet";
 
 interface MessageHeaderProps {
   participant: TParticipant;
@@ -16,12 +18,20 @@ export const MessageHeader: React.FC<MessageHeaderProps> = ({
   showHeader,
   isCurrentUser,
 }) => {
+  const { showWithContent } = useBottomSheet();
+
+  const handleParticipantPress = () => {
+    showWithContent(<ParticipantDetails participant={participant} />, 1);
+  };
+
   if (!showHeader) return null;
 
   return (
     <View style={[styles.header, isCurrentUser && styles.headerRight]}>
       <Image source={{ uri: participant.avatarUrl }} style={styles.avatar} />
-      <Text style={styles.name}>{participant.name}</Text>
+      <TouchableOpacity onPress={handleParticipantPress}>
+        <Text style={styles.name}>{participant.name}</Text>
+      </TouchableOpacity>
       <Text style={styles.time}>{format(timestamp, "h:mm a")}</Text>
     </View>
   );

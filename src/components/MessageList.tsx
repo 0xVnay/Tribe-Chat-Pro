@@ -12,9 +12,18 @@ export const MessageList: React.FC = () => {
       const showHeader =
         !prevMessage || prevMessage.authorUuid !== message.authorUuid;
 
+      // For reply messages, find the participant
+      let replyParticipant;
+      if (message.replyToMessage) {
+        replyParticipant = participants.find(
+          (p) => p.uuid === message.replyToMessage?.authorUuid
+        );
+      }
+
       return {
         ...message,
         showHeader,
+        replyParticipant,
       };
     });
   }, [messages]);

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { MessageHeader } from "./MessageHeader";
 import { MessageReactions } from "./MessageReactions";
 import { MessageAttachments } from "./MessageAttachments";
+import { QuotedMessage } from "./QuotedMessage";
 
 interface MessageProps {
   message: TMessageWithUI;
@@ -28,11 +29,22 @@ export const Message: React.FC<MessageProps> = ({
       />
 
       <View>
-        {message.text && (
+        {(message.text || message.replyToMessage) && (
           <View style={[styles.bubble, isCurrentUser && styles.bubbleRight]}>
-            <Text style={[styles.text, isCurrentUser && styles.textRight]}>
-              {message.text}
-            </Text>
+            {message.replyToMessage && message.replyParticipant && (
+              <QuotedMessage
+                message={message.replyToMessage}
+                participant={message.replyParticipant}
+                isCurrentUser={isCurrentUser}
+              />
+            )}
+
+            {message.text && (
+              <Text style={[styles.text, isCurrentUser && styles.textRight]}>
+                {message.text}
+              </Text>
+            )}
+
             {isEdited && (
               <Text
                 style={[
@@ -45,12 +57,12 @@ export const Message: React.FC<MessageProps> = ({
             )}
           </View>
         )}
-        
+
         <MessageAttachments
           attachments={message.attachments}
           isCurrentUser={isCurrentUser}
         />
-        
+
         <MessageReactions
           reactions={message.reactions}
           isCurrentUser={isCurrentUser}

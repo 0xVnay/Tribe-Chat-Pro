@@ -36,6 +36,7 @@ type TMessage = {
 
 interface TMessageWithUI extends TMessage {
   showHeader?: boolean;
+  replyParticipant?: TParticipant;
 }
 
 type TServerInfo = {

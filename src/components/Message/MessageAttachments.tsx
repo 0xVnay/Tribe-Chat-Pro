@@ -1,10 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 
 interface MessageAttachmentsProps {
   attachments: TMessageAttachment[];
   isCurrentUser: boolean;
+  onImagePress: (image: TMessageAttachment) => void;
 }
 
 const MAX_IMAGE_WIDTH = Dimensions.get("window").width * 0.7;
@@ -12,6 +13,7 @@ const MAX_IMAGE_WIDTH = Dimensions.get("window").width * 0.7;
 export const MessageAttachments: React.FC<MessageAttachmentsProps> = ({
   attachments,
   isCurrentUser,
+  onImagePress,
 }) => {
   if (attachments.length === 0) return null;
 
@@ -25,16 +27,21 @@ export const MessageAttachments: React.FC<MessageAttachmentsProps> = ({
         const height = width / aspectRatio;
 
         return (
-          <Image
+          <TouchableOpacity
             key={attachment.uuid}
-            source={{ uri: attachment.url }}
-            style={[
-              styles.image,
-              { width, height },
-              isCurrentUser && styles.imageRight,
-            ]}
-            contentFit="cover"
-          />
+            onPress={() => onImagePress(attachment)}
+          >
+            <Image
+              key={attachment.uuid}
+              source={{ uri: attachment.url }}
+              style={[
+                styles.image,
+                { width, height },
+                isCurrentUser && styles.imageRight,
+              ]}
+              contentFit="cover"
+            />
+          </TouchableOpacity>
         );
       })}
     </View>

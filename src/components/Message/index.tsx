@@ -9,12 +9,14 @@ interface MessageProps {
   message: TMessageWithUI;
   participant: TParticipant;
   showHeader: boolean | undefined;
+  onImagePress: (image: TMessageAttachment) => void;
 }
 
 export const Message: React.FC<MessageProps> = ({
   message,
   participant,
   showHeader,
+  onImagePress,
 }) => {
   const isEdited = message.updatedAt > message.sentAt;
   const isCurrentUser = participant.uuid === "you";
@@ -61,6 +63,7 @@ export const Message: React.FC<MessageProps> = ({
         <MessageAttachments
           attachments={message.attachments}
           isCurrentUser={isCurrentUser}
+          onImagePress={onImagePress}
         />
 
         <MessageReactions

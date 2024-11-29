@@ -1,12 +1,22 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useChat } from "../hooks/useChat";
 import { Message } from "./Message";
 import { isSameDay } from "date-fns";
 import { DateSeparator } from "./DateSeparator";
+import { ImagePreview } from "./ImagePreview";
 
 export const MessageList: React.FC = () => {
   const { messages, participants } = useChat();
+  const [selectedImage, setSelectedImage] = useState<TMessageAttachment | null>(
+    null
+  );
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+
+  const handleImagePress = (image: TMessageAttachment) => {
+    setSelectedImage(image);
+    setIsPreviewVisible(true);
+  };
 
   const listItems = useMemo(() => {
     const items: TListItem[] = [];
@@ -52,19 +62,30 @@ export const MessageList: React.FC = () => {
             message={item}
             participant={participant}
             showHeader={item.showHeader}
+            onImagePress={handleImagePress}
           />
         );
     }
   };
 
   return (
-    <FlatList
-      style={styles.container}
-      data={listItems}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.uuid}
-      inverted
-    />
+    <>
+      <FlatList
+        style={styles.container}
+        data={listItems}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.uuid}
+        inverted
+      />
+      <ImagePreview
+        visible={isPreviewVisible}
+        image={selectedImage}
+        onClose={() => {
+          setIsPreviewVisible(false);
+          setSelectedImage(null);
+        }}
+      />
+    </>
   );
 };
 

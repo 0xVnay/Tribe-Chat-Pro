@@ -27,7 +27,7 @@ type TMessage = {
   uuid: string;
   text: string;
   attachments: TMessageAttachment[];
-  replyToMessageUuid?: string;
+  replyToMessage?: TMessage;
   reactions: TReaction[];
   authorUuid: string;
   sentAt: number;

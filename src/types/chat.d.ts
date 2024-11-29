@@ -39,6 +39,22 @@ interface TMessageWithUI extends TMessage {
   replyParticipant?: TParticipant;
 }
 
+type TListItemBase = {
+  uuid: string;
+};
+
+type TMessageItem = TMessageWithUI &
+  TListItemBase & {
+    type: "message";
+  };
+
+type TDateItem = {
+  type: "date";
+  date: number;
+} & TListItemBase;
+
+type TListItem = TMessageItem | TDateItem;
+
 type TServerInfo = {
   sessionUuid: string;
   apiVersion: number;

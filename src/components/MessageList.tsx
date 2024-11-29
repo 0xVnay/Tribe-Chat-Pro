@@ -2,51 +2,66 @@ import React, { useMemo } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useChat } from "../hooks/useChat";
 import { Message } from "./Message";
+import { isSameDay } from "date-fns";
+import { DateSeparator } from "./DateSeparator";
 
 export const MessageList: React.FC = () => {
   const { messages, participants } = useChat();
 
-  const groupedMessages = useMemo(() => {
-    return messages.map((message, index) => {
-      const prevMessage = messages[index + 1];
-      const showHeader =
-        !prevMessage || prevMessage.authorUuid !== message.authorUuid;
+  const listItems = useMemo(() => {
+    const items: TListItem[] = [];
 
-      // For reply messages, find the participant
-      let replyParticipant;
-      if (message.replyToMessage) {
-        replyParticipant = participants.find(
-          (p) => p.uuid === message.replyToMessage?.authorUuid
-        );
+    messages.forEach((message, index) => {
+      const prevMessage = messages[index + 1];
+
+      if (!prevMessage || !isSameDay(message.sentAt, prevMessage.sentAt)) {
+        items.push({
+          type: "date",
+          date: message.sentAt,
+          uuid: `date-${message.sentAt}`,
+        });
       }
 
-      return {
+      items.push({
         ...message,
-        showHeader,
-        replyParticipant,
-      };
+        type: "message",
+        showHeader:
+          !prevMessage || prevMessage.authorUuid !== message.authorUuid,
+        replyParticipant: message.replyToMessage
+          ? participants.find(
+              (p) => p.uuid === message.replyToMessage?.authorUuid
+            )
+          : undefined,
+      });
     });
-  }, [messages]);
 
-  const renderMessage = ({ item: message }: { item: TMessageWithUI }) => {
-    const participant = participants.find((p) => p.uuid === message.authorUuid);
+    return items;
+  }, [messages, participants]);
 
-    if (!participant) return null;
-
-    return (
-      <Message
-        message={message}
-        participant={participant}
-        showHeader={message.showHeader}
-      />
-    );
+  const renderItem = ({ item }: { item: TListItem }) => {
+    switch (item.type) {
+      case "date":
+        return <DateSeparator date={item.date} />;
+      case "message":
+        const participant = participants.find(
+          (p) => p.uuid === item.authorUuid
+        );
+        if (!participant) return null;
+        return (
+          <Message
+            message={item}
+            participant={participant}
+            showHeader={item.showHeader}
+          />
+        );
+    }
   };
 
   return (
     <FlatList
       style={styles.container}
-      data={groupedMessages}
-      renderItem={renderMessage}
+      data={listItems}
+      renderItem={renderItem}
       keyExtractor={(item) => item.uuid}
       inverted
     />

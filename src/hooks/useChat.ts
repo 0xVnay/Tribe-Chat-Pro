@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useCallback } from "react";
 import { chatApi } from "../api/chatApi";
 import useChatStore from "../store/chatStore";
 
@@ -11,6 +11,7 @@ export const useChat = () => {
     setParticipants,
     setSessionUuid,
     setLastSync,
+    addMessage,
   } = useChatStore();
 
   const initializeChat = useCallback(async () => {
@@ -37,6 +38,15 @@ export const useChat = () => {
     }
   }, [sessionUuid]);
 
+  const sendMessage = async (text: string) => {
+    try {
+      const message = await chatApi.sendNewMessage(text);
+      addMessage(message);
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
+  };
+
   useEffect(() => {
     initializeChat();
   }, []);
@@ -45,5 +55,6 @@ export const useChat = () => {
     messages,
     participants,
     isInitialized: !!sessionUuid,
+    sendMessage,
   };
 };

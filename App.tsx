@@ -1,14 +1,25 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { MessageList } from "./src/components/MessageList";
+import { ChatInput } from "./src/components/ChatInput";
 import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <KeyboardAvoidingView
+        style={styles.content}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
         <MessageList />
-      </View>
+        <ChatInput />
+      </KeyboardAvoidingView>
       <StatusBar />
     </SafeAreaView>
   );

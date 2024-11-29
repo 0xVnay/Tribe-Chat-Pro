@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useChat } from "../../hooks/useChat";
 import { ReactionsList } from "../BottomSheets/ReactionsList";
-import { BottomSheetContext } from "../../context/BottomSheet";
+import { useBottomSheet } from "../../hooks/useBottomSheet";
 
 interface MessageReactionsProps {
   reactions: TReaction[];
@@ -14,8 +14,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
   isCurrentUser,
 }) => {
   const { participants } = useChat();
-  const { setContent, showBottomSheet, setSnapIndex } =
-    useContext(BottomSheetContext);
+  const { showWithContent } = useBottomSheet();
 
   // Group reactions by emoji value
   const groupedReactions = React.useMemo(() => {
@@ -29,11 +28,10 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
   }, [reactions]);
 
   const handleReactionsPress = () => {
-    setContent(
-      <ReactionsList reactions={reactions} participants={participants} />
+    showWithContent(
+      <ReactionsList reactions={reactions} participants={participants} />,
+      1
     );
-    setSnapIndex(1);
-    showBottomSheet();
   };
 
   if (reactions.length === 0) return null;

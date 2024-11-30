@@ -76,3 +76,12 @@ export const useMessageListItems = () => {
     return items;
   }, [messages, participants]);
 };
+
+export const useGroupedReactions = (reactions: TReaction[]) => {
+  return useMemo(() => {
+    return reactions.reduce<Record<string, TReaction[]>>((acc, reaction) => {
+      (acc[reaction.value] ??= []).push(reaction);
+      return acc;
+    }, {});
+  }, [reactions.length, reactions[0]?.uuid]); // Only recalculates if length or first reaction changes
+};

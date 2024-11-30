@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { ReactionsList } from "../BottomSheets/ReactionsList";
 import { useBottomSheet } from "../../hooks/useBottomSheet";
+import { useGroupedReactions } from "../../hooks/useChatSelectors";
 
 interface MessageReactionsProps {
   reactions: TReaction[];
@@ -13,17 +14,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
   isCurrentUser,
 }) => {
   const { showWithContent } = useBottomSheet();
-
-  // Group reactions by emoji value
-  const groupedReactions = React.useMemo(() => {
-    return reactions.reduce<Record<string, TReaction[]>>((acc, reaction) => {
-      if (!acc[reaction.value]) {
-        acc[reaction.value] = [];
-      }
-      acc[reaction.value].push(reaction);
-      return acc;
-    }, {});
-  }, [reactions]);
+  const groupedReactions = useGroupedReactions(reactions);
 
   const handleReactionsPress = () => {
     showWithContent(<ReactionsList reactions={reactions} />, 1);

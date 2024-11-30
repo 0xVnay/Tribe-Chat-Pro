@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { format } from "date-fns";
@@ -20,9 +20,9 @@ export const MessageHeader: React.FC<MessageHeaderProps> = ({
 }) => {
   const { showWithContent } = useBottomSheet();
 
-  const handleParticipantPress = () => {
+  const handleParticipantPress = useCallback(() => {
     showWithContent(<ParticipantDetails participant={participant} />, 1);
-  };
+  }, [participant, showWithContent]);
 
   if (!showHeader) return null;
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { Message } from "./Message";
 import { DateSeparator } from "./DateSeparator";
@@ -41,12 +41,15 @@ export const MessageList: React.FC = () => {
     }
   };
 
-  const renderFooter = () =>
-    isLoadingMore ? (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="small" />
-      </View>
-    ) : null;
+  const renderFooter = useCallback(
+    () =>
+      isLoadingMore ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="small" />
+        </View>
+      ) : null,
+    [isLoadingMore]
+  );
 
   if (!isInitialized) {
     return (

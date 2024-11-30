@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { chatApi } from "../api/chatApi";
 import useChatStore from "../store/chatStore";
 
-const SYNC_INTERVAL = 5000;
+const SYNC_INTERVAL = 10000;
 
 interface ChatSyncHookResult {
   isInitialized: boolean;

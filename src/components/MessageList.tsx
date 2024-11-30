@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { Message } from "./Message";
 import { DateSeparator } from "./DateSeparator";
@@ -8,24 +8,20 @@ import {
   useParticipantMap,
 } from "../hooks/useChatSelectors";
 import { useChatSync } from "../hooks/useChatSync";
-import useChatStore from "../store/chatStore";
-import { chatApi } from "../api/chatApi";
 import { useInfiniteMessages } from "../hooks/useInfiniteMessages";
+import { useImagePreview } from "../hooks/useImagePreview";
 
 export const MessageList: React.FC = () => {
   const { isInitialized } = useChatSync();
   const listItems = useMessageListItems();
   const participantMap = useParticipantMap();
   const { loadMoreMessages, isLoadingMore } = useInfiniteMessages();
-  const [selectedImage, setSelectedImage] = useState<TMessageAttachment | null>(
-    null
-  );
-  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
-
-  const handleImagePress = (image: TMessageAttachment) => {
-    setSelectedImage(image);
-    setIsPreviewVisible(true);
-  };
+  const {
+    selectedImage,
+    isPreviewVisible,
+    handleImagePress,
+    handlePreviewClose,
+  } = useImagePreview();
 
   const renderItem = ({ item }: { item: TListItem }) => {
     switch (item.type) {
@@ -75,10 +71,7 @@ export const MessageList: React.FC = () => {
       <ImagePreview
         visible={isPreviewVisible}
         image={selectedImage}
-        onClose={() => {
-          setIsPreviewVisible(false);
-          setSelectedImage(null);
-        }}
+        onClose={handlePreviewClose}
       />
     </>
   );

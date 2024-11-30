@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { useChat } from "../../hooks/useChat";
 import { ReactionsList } from "../BottomSheets/ReactionsList";
 import { useBottomSheet } from "../../hooks/useBottomSheet";
 
@@ -13,7 +12,6 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
   reactions,
   isCurrentUser,
 }) => {
-  const { participants } = useChat();
   const { showWithContent } = useBottomSheet();
 
   // Group reactions by emoji value
@@ -28,10 +26,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
   }, [reactions]);
 
   const handleReactionsPress = () => {
-    showWithContent(
-      <ReactionsList reactions={reactions} participants={participants} />,
-      1
-    );
+    showWithContent(<ReactionsList reactions={reactions} />, 1);
   };
 
   if (reactions.length === 0) return null;

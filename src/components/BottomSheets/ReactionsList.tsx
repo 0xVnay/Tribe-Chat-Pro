@@ -1,20 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Image } from "expo-image";
+import { useParticipantMap } from "../../hooks/useChatSelectors";
 
 interface ReactionsListProps {
   reactions: TReaction[];
-  participants: TParticipant[];
 }
 
-export const ReactionsList: React.FC<ReactionsListProps> = ({
-  reactions,
-  participants,
-}) => {
+export const ReactionsList: React.FC<ReactionsListProps> = ({ reactions }) => {
+  const participantMap = useParticipantMap();
   const renderReactionWithParticipant = (reaction: TReaction) => {
-    const participant = participants.find(
-      (p) => p.uuid === reaction.participantUuid
-    );
+    const participant = participantMap[reaction.participantUuid];
     if (!participant) return null;
 
     return (

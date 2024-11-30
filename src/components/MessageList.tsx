@@ -1,13 +1,18 @@
 import React, { useMemo, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { useChat } from "../hooks/useChat";
+import { FlatList, StyleSheet } from "react-native";
 import { Message } from "./Message";
-import { isSameDay } from "date-fns";
 import { DateSeparator } from "./DateSeparator";
 import { ImagePreview } from "./ImagePreview";
+import {
+  useMessageListItems,
+  useParticipantMap,
+} from "../hooks/useChatSelectors";
+import { useChatInitializer } from "../hooks/useChatInitializer";
 
 export const MessageList: React.FC = () => {
-  const { messages, participants } = useChat();
+  useChatInitializer();
+  const listItems = useMessageListItems();
+  const participantMap = useParticipantMap();
   const [selectedImage, setSelectedImage] = useState<TMessageAttachment | null>(
     null
   );
@@ -18,44 +23,12 @@ export const MessageList: React.FC = () => {
     setIsPreviewVisible(true);
   };
 
-  const listItems = useMemo(() => {
-    const items: TListItem[] = [];
-
-    messages.forEach((message, index) => {
-      const prevMessage = messages[index + 1];
-
-      if (!prevMessage || !isSameDay(message.sentAt, prevMessage.sentAt)) {
-        items.push({
-          type: "date",
-          date: message.sentAt,
-          uuid: `date-${message.sentAt}`,
-        });
-      }
-
-      items.push({
-        ...message,
-        type: "message",
-        showHeader:
-          !prevMessage || prevMessage.authorUuid !== message.authorUuid,
-        replyParticipant: message.replyToMessage
-          ? participants.find(
-              (p) => p.uuid === message.replyToMessage?.authorUuid
-            )
-          : undefined,
-      });
-    });
-
-    return items;
-  }, [messages, participants]);
-
   const renderItem = ({ item }: { item: TListItem }) => {
     switch (item.type) {
       case "date":
         return <DateSeparator date={item.date} />;
       case "message":
-        const participant = participants.find(
-          (p) => p.uuid === item.authorUuid
-        );
+        const participant = participantMap[item.authorUuid];
         if (!participant) return null;
         return (
           <Message

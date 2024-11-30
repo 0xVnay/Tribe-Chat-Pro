@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useChat } from "../hooks/useChat";
+import { useChatMessageActions } from "../hooks/useChatActions";
 
 export const ChatInput = () => {
+  const { sendMessage } = useChatMessageActions();
   const [message, setMessage] = useState("");
-  const { sendMessage } = useChat();
 
   const handleSend = () => {
     if (!message.trim()) return;

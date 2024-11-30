@@ -10,6 +10,7 @@ const useChatStore = create(
       sessionUuid: null,
       lastSync: 0,
       isInitialized: false,
+      isLoadingMore: false,
 
       setMessages: (messages) => set({ messages }),
 
@@ -38,6 +39,21 @@ const useChatStore = create(
           };
         }),
 
+      appendOlderMessages: (olderMessages) =>
+        set((state) => {
+          const messageMap = new Map(state.messages.map((m) => [m.uuid, m]));
+          olderMessages.forEach((message) => {
+            if (!messageMap.has(message.uuid)) {
+              messageMap.set(message.uuid, message);
+            }
+          });
+          return {
+            messages: Array.from(messageMap.values()).sort(
+              (a, b) => b.sentAt - a.sentAt
+            ),
+          };
+        }),
+
       setParticipants: (participants) => set({ participants }),
 
       updateParticipants: (updatedParticipants) =>
@@ -55,6 +71,7 @@ const useChatStore = create(
 
       setSessionUuid: (uuid) => set({ sessionUuid: uuid }),
       setLastSync: (timestamp) => set({ lastSync: timestamp }),
+      setIsLoadingMore: (loading) => set({ isLoadingMore: loading }),
       setIsInitialized: (initialized) => set({ isInitialized: initialized }),
 
       clearLocalData: () =>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { Message } from "./Message";
 import { DateSeparator } from "./DateSeparator";
@@ -8,6 +8,8 @@ import {
   useParticipantMap,
 } from "../hooks/useChatSelectors";
 import { useChatSync } from "../hooks/useChatSync";
+import useChatStore from "../store/chatStore";
+import { chatApi } from "../api/chatApi";
 
 export const MessageList: React.FC = () => {
   const { isInitialized } = useChatSync();
@@ -17,11 +19,36 @@ export const MessageList: React.FC = () => {
     null
   );
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+  const { appendOlderMessages, isLoadingMore, setIsLoadingMore } =
+    useChatStore();
 
   const handleImagePress = (image: TMessageAttachment) => {
     setSelectedImage(image);
     setIsPreviewVisible(true);
   };
+
+  const handleLoadMore = useCallback(async () => {
+    if (isLoadingMore || listItems.length === 0) return;
+
+    const lastMessageItem = listItems
+      .filter((item) => item.type === "message")
+      .pop();
+    if (!lastMessageItem || lastMessageItem.type !== "message") return;
+
+    setIsLoadingMore(true);
+    try {
+      const olderMessages = await chatApi.getOlderMessages(
+        lastMessageItem.uuid
+      );
+      if (olderMessages.length > 0) {
+        appendOlderMessages(olderMessages);
+      }
+    } catch (error) {
+      console.error("Failed to load older messages:", error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }, [isLoadingMore, listItems, appendOlderMessages, setIsLoadingMore]);
 
   const renderItem = ({ item }: { item: TListItem }) => {
     switch (item.type) {
@@ -41,6 +68,13 @@ export const MessageList: React.FC = () => {
     }
   };
 
+  const renderFooter = () =>
+    isLoadingMore ? (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="small" />
+      </View>
+    ) : null;
+
   if (!isInitialized) {
     return (
       <View style={{ backgroundClip: "red", flex: 1 }}>
@@ -57,6 +91,9 @@ export const MessageList: React.FC = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item.uuid}
         inverted
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
       />
       <ImagePreview
         visible={isPreviewVisible}
@@ -77,5 +114,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: "#000",
+  },
+  loaderContainer: {
+    padding: 16,
+    alignItems: "center",
   },
 });

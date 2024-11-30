@@ -10,45 +10,22 @@ import {
 import { useChatSync } from "../hooks/useChatSync";
 import useChatStore from "../store/chatStore";
 import { chatApi } from "../api/chatApi";
+import { useInfiniteMessages } from "../hooks/useInfiniteMessages";
 
 export const MessageList: React.FC = () => {
   const { isInitialized } = useChatSync();
   const listItems = useMessageListItems();
   const participantMap = useParticipantMap();
+  const { loadMoreMessages, isLoadingMore } = useInfiniteMessages();
   const [selectedImage, setSelectedImage] = useState<TMessageAttachment | null>(
     null
   );
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
-  const { appendOlderMessages, isLoadingMore, setIsLoadingMore } =
-    useChatStore();
 
   const handleImagePress = (image: TMessageAttachment) => {
     setSelectedImage(image);
     setIsPreviewVisible(true);
   };
-
-  const handleLoadMore = useCallback(async () => {
-    if (isLoadingMore || listItems.length === 0) return;
-
-    const lastMessageItem = listItems
-      .filter((item) => item.type === "message")
-      .pop();
-    if (!lastMessageItem || lastMessageItem.type !== "message") return;
-
-    setIsLoadingMore(true);
-    try {
-      const olderMessages = await chatApi.getOlderMessages(
-        lastMessageItem.uuid
-      );
-      if (olderMessages.length > 0) {
-        appendOlderMessages(olderMessages);
-      }
-    } catch (error) {
-      console.error("Failed to load older messages:", error);
-    } finally {
-      setIsLoadingMore(false);
-    }
-  }, [isLoadingMore, listItems, appendOlderMessages, setIsLoadingMore]);
 
   const renderItem = ({ item }: { item: TListItem }) => {
     switch (item.type) {
@@ -91,7 +68,7 @@ export const MessageList: React.FC = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item.uuid}
         inverted
-        onEndReached={handleLoadMore}
+        onEndReached={loadMoreMessages}
         onEndReachedThreshold={0.5}
         ListFooterComponent={renderFooter}
       />

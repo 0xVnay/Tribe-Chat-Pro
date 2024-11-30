@@ -1,5 +1,7 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Avatar, Badge, Card, Text } from "../common";
+import { format } from "date-fns";
 
 type ParticipantDetailsProps = {
   participant: TParticipant;
@@ -9,97 +11,58 @@ export const ParticipantDetails: React.FC<ParticipantDetailsProps> = ({
   participant,
 }) => {
   return (
-    <View style={styles.container}>
+    <Card variant="flat" padding={0}>
       <View style={styles.header}>
-        {participant.avatarUrl ? (
-          <Image
-            source={{ uri: participant.avatarUrl }}
-            style={styles.avatar}
-          />
-        ) : (
-          <View style={[styles.avatar, styles.placeholderAvatar]}>
-            <Text style={styles.avatarText}>
-              {participant.name.charAt(0).toUpperCase()}
-            </Text>
-          </View>
+        <Avatar
+          url={participant.avatarUrl}
+          name={participant.name}
+          size="lg"
+          border
+        />
+        <Text variant="heading">{participant.name}</Text>
+        {participant.jobTitle && (
+          <Badge variant="subtle" label={participant.jobTitle} />
         )}
-        <View style={styles.headerText}>
-          <Text style={styles.name}>{participant.name}</Text>
-          {participant.jobTitle && (
-            <Text style={styles.jobTitle}>{participant.jobTitle}</Text>
-          )}
-        </View>
       </View>
-
-      {participant.email && (
-        <View style={styles.infoSection}>
-          <Text style={styles.label}>Email</Text>
-          <Text style={styles.value}>{participant.email}</Text>
-        </View>
-      )}
-
-      {participant.bio && (
-        <View style={styles.infoSection}>
-          <Text style={styles.label}>Bio</Text>
-          <Text style={styles.value}>{participant.bio}</Text>
-        </View>
-      )}
-
-      <View style={styles.infoSection}>
-        <Text style={styles.label}>Member since</Text>
-        <Text style={styles.value}>
-          {new Date(participant.createdAt).toLocaleDateString()}
-        </Text>
+      <View style={styles.content}>
+        {participant.email && (
+          <InfoItem label="Email" value={participant.email} />
+        )}
+        {participant.bio && <InfoItem label="Bio" value={participant.bio} />}
+        <InfoItem
+          label="Member since"
+          value={format(participant.createdAt, "PP")}
+        />
       </View>
-    </View>
+    </Card>
   );
 };
 
+interface InfoItemProps {
+  label: string;
+  value: string;
+}
+
+const InfoItem = ({ label, value }: InfoItemProps) => (
+  <View style={styles.infoItem}>
+    <Text variant="label" color="secondary">
+      {label}
+    </Text>
+    <Text variant="body">{value}</Text>
+  </View>
+);
+
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
   header: {
-    flexDirection: "row",
+    paddingTop: 10,
     alignItems: "center",
-    marginBottom: 24,
+    gap: 12,
   },
-  headerText: {
-    flex: 1,
-    marginLeft: 16,
+  content: {
+    padding: 20,
+    gap: 16,
   },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-  },
-  placeholderAvatar: {
-    backgroundColor: "#E1E1E1",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  avatarText: {
-    fontSize: 24,
-    color: "#666",
-  },
-  name: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  jobTitle: {
-    fontSize: 16,
-    color: "#666",
-  },
-  infoSection: {
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 4,
-  },
-  value: {
-    fontSize: 16,
+  infoItem: {
+    gap: 4,
   },
 });

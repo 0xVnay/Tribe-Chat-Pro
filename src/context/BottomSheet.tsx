@@ -38,7 +38,7 @@ export const BottomSheetContext = createContext<BottomSheetContextProps>({
 export const BottomSheetProvider = ({ children }: BottomSheetProviderProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [snapIndex, setSnapIndex] = useState<number>(0);
-  const snapPoints = useMemo(() => ["40%", "60%"], []);
+  const snapPoints = useMemo(() => ["50%", "70%"], []);
   const [dismissCallback, setDismissCallback] = useState<() => void>(() => {});
   const [Content, setContent] = useState<React.ReactNode | null>(null);
 

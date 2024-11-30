@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Image } from "expo-image";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { format } from "date-fns";
 import { ParticipantDetails } from "../BottomSheets/ParticipantDetails";
 import { useBottomSheet } from "../../hooks/useBottomSheet";
+import { Avatar, Text } from "../common";
 
 interface MessageHeaderProps {
   participant: TParticipant;
@@ -27,39 +27,37 @@ export const MessageHeader: React.FC<MessageHeaderProps> = ({
   if (!showHeader) return null;
 
   return (
-    <View style={[styles.header, isCurrentUser && styles.headerRight]}>
-      <Image source={{ uri: participant.avatarUrl }} style={styles.avatar} />
-      <TouchableOpacity onPress={handleParticipantPress}>
-        <Text style={styles.name}>{participant.name}</Text>
+    <View style={[styles.container, isCurrentUser && styles.containerRight]}>
+      <TouchableOpacity onPress={handleParticipantPress} style={styles.author}>
+        <Avatar url={participant.avatarUrl} name={participant.name} size="sm" />
+        <Text variant="subheading" style={styles.name}>
+          {participant.name}
+        </Text>
       </TouchableOpacity>
-      <Text style={styles.time}>{format(timestamp, "h:mm a")}</Text>
+      <Text variant="caption" color="secondary">
+        {format(timestamp, "h:mm a")}
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
+  container: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 4,
+    gap: 8,
   },
-  headerRight: {
+  containerRight: {
     justifyContent: "flex-end",
   },
-  avatar: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    marginRight: 8,
+  author: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
   name: {
-    fontWeight: "600",
     fontSize: 14,
-    color: "#000",
-    marginRight: 8,
-  },
-  time: {
-    fontSize: 12,
-    color: "#666",
+    fontWeight: "600",
   },
 });

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { ReactionsList } from "../BottomSheets/ReactionsList";
 import { useBottomSheet } from "../../hooks/useBottomSheet";
 import { useGroupedReactions } from "../../hooks/useChatSelectors";
+import { Badge } from "../common";
 
 interface MessageReactionsProps {
   reactions: TReaction[];
@@ -28,10 +29,11 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
       style={[styles.container, isCurrentUser && styles.containerRight]}
     >
       {Object.entries(groupedReactions).map(([emoji, reactions]) => (
-        <View key={emoji} style={styles.reaction}>
-          <Text style={styles.emoji}>{emoji}</Text>
-          <Text style={styles.count}>{reactions.length}</Text>
-        </View>
+        <Badge
+          key={emoji}
+          variant="subtle"
+          label={`${emoji} ${reactions.length}`}
+        />
       ))}
     </Pressable>
   );

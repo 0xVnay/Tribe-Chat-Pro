@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Text } from "../common";
 
 interface QuotedMessageProps {
   message: TMessage;
@@ -16,11 +17,16 @@ export const QuotedMessage: React.FC<QuotedMessageProps> = ({
     <View style={styles.container}>
       <View style={[styles.quoteBar, isCurrentUser && styles.quoteBarLight]} />
       <View style={styles.content}>
-        <Text style={[styles.authorName, isCurrentUser && styles.textLight]}>
+        <Text
+          variant="caption"
+          color={isCurrentUser ? "light" : "secondary"}
+          style={styles.name}
+        >
           {participant.name}
         </Text>
-        <Text 
-          style={[styles.text, isCurrentUser && styles.textLight]}
+        <Text
+          variant="body"
+          color={isCurrentUser ? "light" : "secondary"}
           numberOfLines={2}
         >
           {message.text}
@@ -47,17 +53,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  authorName: {
-    fontSize: 13.5,
-    fontWeight: "600",
-    color: "#666",
-    marginBottom: 2,
-  },
-  text: {
-    fontSize: 13.5,
-    color: "#666",
-  },
-  textLight: {
-    color: "rgba(255, 255, 255, 0.9)",
-  },
+  name: {
+    marginBottom: 4
+  }
 });

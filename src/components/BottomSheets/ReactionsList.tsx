@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { Image } from "expo-image";
+import { View, StyleSheet } from "react-native";
 import { useParticipantMap } from "../../hooks/useChatSelectors";
+import { Avatar, Card, Text } from "../common";
+import { Separator } from "../common/Separator";
 
 interface ReactionsListProps {
   reactions: TReaction[];
@@ -9,74 +10,56 @@ interface ReactionsListProps {
 
 export const ReactionsList: React.FC<ReactionsListProps> = ({ reactions }) => {
   const participantMap = useParticipantMap();
-  const renderReactionWithParticipant = (reaction: TReaction) => {
+
+  const renderReactionItem = (reaction: TReaction) => {
     const participant = participantMap[reaction.participantUuid];
     if (!participant) return null;
 
     return (
-      <View
-        key={`${reaction.value}-${reaction.participantUuid}`}
-        style={styles.reactionItem}
-      >
-        <Text style={styles.emoji}>{reaction.value}</Text>
-        <View style={styles.participantInfo}>
-          <Image
-            source={{ uri: participant.avatarUrl }}
-            style={styles.avatar}
-          />
-          <Text style={styles.name}>{participant.name}</Text>
+      <React.Fragment key={`${reaction.value}-${reaction.participantUuid}`}>
+        <View style={styles.reactionItem}>
+          <Text variant="heading" style={styles.emoji}>
+            {reaction.value}
+          </Text>
+          <View style={styles.participantInfo}>
+            <Avatar
+              url={participant.avatarUrl}
+              name={participant.name}
+              size="sm"
+            />
+            <Text variant="body">{participant.name}</Text>
+          </View>
         </View>
-      </View>
+        <Separator spacing={"100%"} />
+      </React.Fragment>
     );
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Reactions</Text>
-      <View style={styles.reactionsList}>
-        {reactions.map(renderReactionWithParticipant)}
-      </View>
-    </View>
+    <Card variant="flat">
+      <Text variant="heading">Reactions</Text>
+      <View style={styles.list}>{reactions.map(renderReactionItem)}</View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: 16,
-  },
-  reactionsList: {
+  list: {
     gap: 12,
+    marginTop: 16,
+    // backgroundColor:"red"
   },
   reactionItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E8E8E8",
+    gap: 12,
   },
   emoji: {
     fontSize: 24,
-    marginRight: 12,
   },
   participantInfo: {
     flexDirection: "row",
     alignItems: "center",
-    flex: 1,
-  },
-  avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    marginRight: 8,
-  },
-  name: {
-    fontSize: 16,
-    color: "#000",
+    gap: 8,
   },
 });

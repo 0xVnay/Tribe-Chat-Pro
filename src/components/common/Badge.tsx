@@ -10,7 +10,7 @@ interface BadgeProps {
 
 export const Badge = ({ label, variant = "default" }: BadgeProps) => (
   <View style={[styles.badge, styles[variant]]}>
-    <Text variant="caption" color={variant === "default" ? "light" : "primary"}>
+    <Text variant="paragraph" color={variant === "default" ? "light" : "primary"}>
       {label}
     </Text>
   </View>
@@ -18,7 +18,7 @@ export const Badge = ({ label, variant = "default" }: BadgeProps) => (
 
 const styles = StyleSheet.create({
   badge: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },

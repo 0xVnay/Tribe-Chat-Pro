@@ -8,7 +8,7 @@ interface MessageAttachmentsProps {
   onImagePress: (image: TMessageAttachment) => void;
 }
 
-const MAX_IMAGE_WIDTH = Dimensions.get("window").width * 0.7;
+const MAX_IMAGE_WIDTH = Dimensions.get("window").width * 0.65;
 
 export const MessageAttachments: React.FC<MessageAttachmentsProps> = ({
   attachments,
@@ -50,7 +50,7 @@ export const MessageAttachments: React.FC<MessageAttachmentsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 8,
+    marginTop: 2,
   },
   image: {
     borderRadius: 12,

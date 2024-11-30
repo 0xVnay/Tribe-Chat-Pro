@@ -43,7 +43,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, .9)",
+    backgroundColor: "rgb(0, 0, 0)",
     justifyContent: "center",
     alignItems: "center",
   },

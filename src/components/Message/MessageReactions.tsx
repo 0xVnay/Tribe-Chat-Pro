@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 4,
-    marginTop: 4,
+    marginTop: 2,
+    marginBottom: 4,
     alignSelf: "flex-start",
   },
   containerRight: {

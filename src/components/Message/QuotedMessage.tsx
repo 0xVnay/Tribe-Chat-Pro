@@ -25,7 +25,7 @@ export const QuotedMessage: React.FC<QuotedMessageProps> = ({
           {participant.name}
         </Text>
         <Text
-          variant="body"
+          variant="label"
           color={isCurrentUser ? "light" : "secondary"}
           numberOfLines={2}
         >

@@ -1,15 +1,8 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { View, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import { useChatMessageActions } from "../hooks/useChatActions";
 import { colors } from "../constants/theme";
-import { Button, Card, Icon, Text } from "./common";
+import { Icon, Text } from "./common";
 
 export const ChatInput = () => {
   const { sendMessage } = useChatMessageActions();
@@ -22,25 +15,27 @@ export const ChatInput = () => {
   };
 
   return (
-    <Card variant="flat" padding={12}>
-      <View style={styles.container}>
-        <Text.Input
-          style={styles.input}
-          value={message}
-          onChangeText={setMessage}
-          placeholder="Type a message..."
-          multiline
-          maxLength={1000}
-        />
+    <View style={styles.container}>
+      <Text.Input
+        style={styles.input}
+        value={message}
+        onChangeText={setMessage}
+        placeholder="Type a message..."
+        multiline
+        maxLength={1000}
+      />
 
-        <Button
-          variant="primary"
-          icon={<Icon name="send" color="light" size={20} />}
-          onPress={handleSend}
-          disabled={!message.trim()}
-        />
-      </View>
-    </Card>
+      <TouchableOpacity
+        style={[
+          styles.sendButton,
+          !message.trim() && styles.sendButtonDisabled,
+        ]}
+        onPress={handleSend}
+        disabled={!message.trim()}
+      >
+        <Icon name="send" color="light" size={20} />
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -49,7 +44,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    paddingBottom: Platform.OS === "ios" ? 16 : 0,
+    paddingBottom: Platform.OS === "ios" ? 16 : 8,
+    borderTopWidth: 1,
+    borderTopColor: "#E2E8F0",
+    paddingTop: 8,
+    paddingHorizontal: 16,
   },
   input: {
     flex: 1,
@@ -57,5 +56,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background.accent,
     borderRadius: 24,
     fontSize: 16,
+  },
+  sendButton: {
+    backgroundColor: colors.primary,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  sendButtonDisabled: {
+    opacity: 0.5,
   },
 });

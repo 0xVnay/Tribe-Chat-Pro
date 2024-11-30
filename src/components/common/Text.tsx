@@ -13,6 +13,7 @@ type TextVariant =
   | "heading"
   | "subheading"
   | "body"
+  | "paragraph"
   | "caption"
   | "button"
   | "label";
@@ -62,8 +63,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 22,
   },
-  caption: {
+  paragraph: {
     fontSize: 12,
+    fontWeight: "500",
+  },
+  caption: {
+    fontSize: 10,
     color: colors.text.secondary,
   },
   button: {
@@ -72,7 +77,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: "400",
   },
   input: {
     fontSize: 16,

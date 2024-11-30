@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { Message } from "./Message";
 import { DateSeparator } from "./DateSeparator";
 import { ImagePreview } from "./ImagePreview";
@@ -7,10 +7,10 @@ import {
   useMessageListItems,
   useParticipantMap,
 } from "../hooks/useChatSelectors";
-import { useChatInitializer } from "../hooks/useChatInitializer";
+import { useChatSync } from "../hooks/useChatSync";
 
 export const MessageList: React.FC = () => {
-  useChatInitializer();
+  const { isInitialized } = useChatSync();
   const listItems = useMessageListItems();
   const participantMap = useParticipantMap();
   const [selectedImage, setSelectedImage] = useState<TMessageAttachment | null>(
@@ -40,6 +40,14 @@ export const MessageList: React.FC = () => {
         );
     }
   };
+
+  if (!isInitialized) {
+    return (
+      <View style={{ backgroundClip: "red", flex: 1 }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   return (
     <>

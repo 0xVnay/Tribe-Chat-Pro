@@ -33,7 +33,7 @@ export const useParticipantMap = () => {
       participants.reduce((acc, participant) => {
         acc[participant.uuid] = participant;
         return acc;
-      }, {} as Record<string, (typeof participants)[0]>),
+      }, {} as Record<string, TParticipant>),
     [participants]
   );
 };

@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const useChatStore = create(
   persist<ChatState>(
-    (set) => ({
+    (set, get) => ({
       messages: [],
       participants: [],
       sessionUuid: null,
@@ -25,10 +25,45 @@ const useChatStore = create(
           ),
         })),
 
+      updateMessages: (updatedMessages) =>
+        set((state) => {
+          const messageMap = new Map(state.messages.map((m) => [m.uuid, m]));
+          updatedMessages.forEach((message) =>
+            messageMap.set(message.uuid, message)
+          );
+          return {
+            messages: Array.from(messageMap.values()).sort(
+              (a, b) => b.sentAt - a.sentAt
+            ),
+          };
+        }),
+
       setParticipants: (participants) => set({ participants }),
+
+      updateParticipants: (updatedParticipants) =>
+        set((state) => {
+          const participantMap = new Map(
+            state.participants.map((p) => [p.uuid, p])
+          );
+          updatedParticipants.forEach((participant) =>
+            participantMap.set(participant.uuid, participant)
+          );
+          return {
+            participants: Array.from(participantMap.values()),
+          };
+        }),
+
       setSessionUuid: (uuid) => set({ sessionUuid: uuid }),
       setLastSync: (timestamp) => set({ lastSync: timestamp }),
       setIsInitialized: (initialized) => set({ isInitialized: initialized }),
+
+      clearLocalData: () =>
+        set({
+          messages: [],
+          participants: [],
+          lastSync: 0,
+          isInitialized: false,
+        }),
     }),
     {
       name: "chat-storage",

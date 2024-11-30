@@ -4,7 +4,6 @@ import { MessageHeader } from "./MessageHeader";
 import { MessageReactions } from "./MessageReactions";
 import { MessageAttachments } from "./MessageAttachments";
 import { QuotedMessage } from "./QuotedMessage";
-import { colors } from "../../constants/theme";
 import { Text } from "../common";
 
 interface MessageProps {
@@ -33,7 +32,12 @@ export const Message: React.FC<MessageProps> = ({
       />
 
       <View style={styles.messageContent}>
-        <View style={[styles.bubble, isCurrentUser && styles.bubbleRight]}>
+        <View
+          style={[
+            styles.bubble,
+            isCurrentUser ? styles.sender : styles.recipient,
+          ]}
+        >
           {message.replyToMessage && message.replyParticipant && (
             <QuotedMessage
               message={message.replyToMessage}
@@ -44,7 +48,6 @@ export const Message: React.FC<MessageProps> = ({
           <Text variant="body" color={isCurrentUser ? "light" : "primary"}>
             {message.text}
           </Text>
-
           {isEdited && (
             <Text
               variant="caption"
@@ -73,25 +76,33 @@ export const Message: React.FC<MessageProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 4,
+    marginVertical: 1,
     paddingHorizontal: 16,
   },
   containerRight: {
     alignItems: "flex-end",
   },
   messageContent: {
-    maxWidth: "80%",
+    maxWidth: "75%",
   },
   bubble: {
-    backgroundColor: colors.background.secondary,
-    borderRadius: 20,
-    padding: 12,
-    paddingHorizontal: 16,
+    borderRadius: 12,
+    padding: 10,
+    paddingHorizontal: 12,
+    margin: 1,
   },
-  bubbleRight: {
-    backgroundColor: colors.primary,
+  sender: {
+    backgroundColor: "#0084FF",
+    alignSelf: "flex-end",
+    borderRadius: 12,
+  },
+  recipient: {
+    backgroundColor: "#E8E8F7",
+    alignSelf: "flex-start",
+    borderRadius: 12,
   },
   editedText: {
     marginTop: 4,
+    fontSize: 11,
   },
 });

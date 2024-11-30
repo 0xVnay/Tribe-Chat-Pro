@@ -9,6 +9,7 @@ const useChatStore = create(
       participants: [],
       sessionUuid: null,
       lastSync: 0,
+      isInitialized: false,
 
       setMessages: (messages) => set({ messages }),
 
@@ -27,10 +28,15 @@ const useChatStore = create(
       setParticipants: (participants) => set({ participants }),
       setSessionUuid: (uuid) => set({ sessionUuid: uuid }),
       setLastSync: (timestamp) => set({ lastSync: timestamp }),
+      setIsInitialized: (initialized) => set({ isInitialized: initialized }),
     }),
     {
       name: "chat-storage",
       storage: createJSONStorage(() => AsyncStorage),
+      onRehydrateStorage: () => (state) => {
+        // Reset isInitialized on rehydration
+        state?.setIsInitialized(false);
+      },
     }
   )
 );

@@ -1,10 +1,12 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { format } from "date-fns";
 import { MessageHeader } from "./MessageHeader";
 import { MessageReactions } from "./MessageReactions";
 import { MessageAttachments } from "./MessageAttachments";
 import { QuotedMessage } from "./QuotedMessage";
 import { Text } from "../common";
+import { colors } from "../../constants/theme";
 
 interface MessageProps {
   message: TMessageWithUI;
@@ -26,7 +28,6 @@ export const Message: React.FC<MessageProps> = ({
     <View style={[styles.container, isCurrentUser && styles.containerRight]}>
       <MessageHeader
         participant={participant}
-        timestamp={message.sentAt}
         showHeader={showHeader}
         isCurrentUser={isCurrentUser}
       />
@@ -45,18 +46,25 @@ export const Message: React.FC<MessageProps> = ({
               isCurrentUser={isCurrentUser}
             />
           )}
-          <Text variant="body" color={isCurrentUser ? "light" : "primary"}>
+          <Text variant="body" color={isCurrentUser ? "light" : "dark"}>
             {message.text}
           </Text>
-          {isEdited && (
+          <View style={styles.bottomRow}>
             <Text
               variant="caption"
               color={isCurrentUser ? "light" : "secondary"}
               style={styles.editedText}
             >
-              (edited)
+              {isEdited ? "(edited)" : ""}
             </Text>
-          )}
+            <Text
+              variant="caption"
+              color={isCurrentUser ? "light" : "secondary"}
+              style={styles.timestamp}
+            >
+              {format(message.sentAt, "h:mm a")}
+            </Text>
+          </View>
         </View>
 
         <MessageAttachments
@@ -92,17 +100,26 @@ const styles = StyleSheet.create({
     margin: 1,
   },
   sender: {
-    backgroundColor: "#0084FF",
+    backgroundColor: colors.primary,
     alignSelf: "flex-end",
     borderRadius: 12,
   },
   recipient: {
-    backgroundColor: "#E8E8F7",
+    backgroundColor: colors.secondary,
     alignSelf: "flex-start",
     borderRadius: 12,
   },
-  editedText: {
+  bottomRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 4,
     marginTop: 4,
+  },
+  editedText: {
     fontSize: 11,
+  },
+  timestamp: {
+    fontSize: 10,
   },
 });

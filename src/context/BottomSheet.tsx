@@ -94,6 +94,7 @@ export const BottomSheetProvider = ({ children }: BottomSheetProviderProps) => {
               backdropComponent={(backdropProps) => (
                 <BottomSheetBackdrop
                   {...backdropProps}
+                  opacity={0.7}
                   enableTouchThrough={true}
                 />
               )}

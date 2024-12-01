@@ -12,6 +12,4 @@ export const colors = {
     accent: "#EEF2FF",
   },
   border: "#E5E7EB",
-  success: "#10B981",
-  error: "#EF4444",
 };

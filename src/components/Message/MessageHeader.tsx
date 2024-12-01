@@ -1,20 +1,17 @@
 import React, { useCallback } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { format } from "date-fns";
 import { ParticipantDetails } from "../BottomSheets/ParticipantDetails";
 import { useBottomSheet } from "../../hooks/useBottomSheet";
 import { Avatar, Text } from "../common";
 
 interface MessageHeaderProps {
   participant: TParticipant;
-  timestamp: number;
   showHeader: boolean | undefined;
   isCurrentUser: boolean;
 }
 
 export const MessageHeader: React.FC<MessageHeaderProps> = ({
   participant,
-  timestamp,
   showHeader,
   isCurrentUser,
 }) => {
@@ -29,40 +26,33 @@ export const MessageHeader: React.FC<MessageHeaderProps> = ({
   return (
     <View style={[styles.container, isCurrentUser && styles.containerRight]}>
       {isCurrentUser ? (
-        <>
-          <Text variant="caption" color="secondary">
-            {format(timestamp, "h:mm a")}
+        <TouchableOpacity
+          onPress={handleParticipantPress}
+          style={styles.author}
+        >
+          <Text variant="subheading" style={styles.name}>
+            {participant.name}
           </Text>
-          <TouchableOpacity
-            onPress={handleParticipantPress}
-            style={styles.author}
-          >
-            <Avatar
-              url={participant.avatarUrl}
-              name={participant.name}
-              size="sm"
-            />
-          </TouchableOpacity>
-        </>
+          <Avatar
+            url={participant.avatarUrl}
+            name={participant.name}
+            size="sm"
+          />
+        </TouchableOpacity>
       ) : (
-        <>
-          <TouchableOpacity
-            onPress={handleParticipantPress}
-            style={styles.author}
-          >
-            <Avatar
-              url={participant.avatarUrl}
-              name={participant.name}
-              size="sm"
-            />
-            <Text variant="subheading" style={styles.name}>
-              {participant.name}
-            </Text>
-          </TouchableOpacity>
-          <Text variant="caption" color="secondary">
-            {format(timestamp, "h:mm a")}
+        <TouchableOpacity
+          onPress={handleParticipantPress}
+          style={styles.author}
+        >
+          <Avatar
+            url={participant.avatarUrl}
+            name={participant.name}
+            size="sm"
+          />
+          <Text variant="subheading" style={styles.name}>
+            {participant.name}
           </Text>
-        </>
+        </TouchableOpacity>
       )}
     </View>
   );

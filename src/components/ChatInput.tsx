@@ -21,6 +21,7 @@ export const ChatInput = () => {
         value={message}
         onChangeText={setMessage}
         placeholder="Type a message..."
+        placeholderTextColor={colors.text.secondary}
         multiline
         maxLength={1000}
       />
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     padding: 12,
-    backgroundColor: colors.background.accent,
+    backgroundColor: colors.secondary,
     borderRadius: 24,
     fontSize: 16,
   },

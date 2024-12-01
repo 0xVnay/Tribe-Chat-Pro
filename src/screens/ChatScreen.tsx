@@ -16,7 +16,7 @@ export const ChatScreen = () => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.content}
-        behavior={Platform.OS === "ios" ? "height" : undefined}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View style={styles.header}>
           <Text variant="subheading" style={styles.headerTitle}>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: Platform.OS === "ios" ? 12 : 16,
     borderBottomWidth: 1,
     borderBottomColor: "#E2E8F0",
   },

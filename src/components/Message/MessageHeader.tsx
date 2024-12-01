@@ -28,15 +28,42 @@ export const MessageHeader: React.FC<MessageHeaderProps> = ({
 
   return (
     <View style={[styles.container, isCurrentUser && styles.containerRight]}>
-      <TouchableOpacity onPress={handleParticipantPress} style={styles.author}>
-        <Avatar url={participant.avatarUrl} name={participant.name} size="sm" />
-        <Text variant="subheading" style={styles.name}>
-          {participant.name}
-        </Text>
-      </TouchableOpacity>
-      <Text variant="caption" color="secondary">
-        {format(timestamp, "h:mm a")}
-      </Text>
+      {isCurrentUser ? (
+        <>
+          <Text variant="caption" color="secondary">
+            {format(timestamp, "h:mm a")}
+          </Text>
+          <TouchableOpacity
+            onPress={handleParticipantPress}
+            style={styles.author}
+          >
+            <Avatar
+              url={participant.avatarUrl}
+              name={participant.name}
+              size="sm"
+            />
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <TouchableOpacity
+            onPress={handleParticipantPress}
+            style={styles.author}
+          >
+            <Avatar
+              url={participant.avatarUrl}
+              name={participant.name}
+              size="sm"
+            />
+            <Text variant="subheading" style={styles.name}>
+              {participant.name}
+            </Text>
+          </TouchableOpacity>
+          <Text variant="caption" color="secondary">
+            {format(timestamp, "h:mm a")}
+          </Text>
+        </>
+      )}
     </View>
   );
 };

@@ -4,10 +4,11 @@ A cross-platform single room chat application built with React Native, Expo and 
 
 ## Demo Video
 
-<video width="50%" controls>
-  <source src="./screenshots/assignment-demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<div align="center">
+  <a href="https://drive.google.com/file/d/12HAVVE1KekqfHqpZinHeLoeQk3cMM7Bc/preview">
+    <img src="https://drive.google.com/thumbnail?id=12HAVVE1KekqfHqpZinHeLoeQk3cMM7Bc" alt="Demo Video">
+  </a>
+</div>
 
 ## Getting Started
 

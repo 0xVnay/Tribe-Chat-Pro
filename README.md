@@ -2,6 +2,13 @@
 
 A cross-platform single room chat application built with React Native, Expo and Zustand.
 
+## Demo Video
+
+<video width="50%" controls>
+  <source src="./screenshots/assignment-demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 ## Getting Started
 
 ### Prerequisites
@@ -134,44 +141,3 @@ src/
 └── utils
     └── date.ts
 ```
-
-# React Native Chat App
-
-A cross-platform single room chat application built with React Native, Expo and Zustand.
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v16 or later)
-- npm or yarn
-- Expo CLI
-- iOS Simulator (for Mac) or Android Studio Emulator
-
-### Installation
-
-Using npm:
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npx expo start
-```
-
-Using yarn:
-
-```bash
-# Install dependencies
-yarn install
-
-# Start development server
-yarn expo start
-```
-
-Once the development server starts:
-
-- Press `i` to open iOS simulator
-- Press `a` to open Android emulator
-- Scan QR code with Expo Go app for physical devices

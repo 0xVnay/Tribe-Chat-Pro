@@ -10,6 +10,7 @@ import {
 import { useChatSync } from "../hooks/useChatSync";
 import { useInfiniteMessages } from "../hooks/useInfiniteMessages";
 import { useImagePreview } from "../hooks/useImagePreview";
+import { Loading } from "./common";
 
 export const MessageList: React.FC = () => {
   const { isInitialized } = useChatSync();
@@ -44,19 +45,18 @@ export const MessageList: React.FC = () => {
   const renderFooter = useCallback(
     () =>
       isLoadingMore ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="small" />
-        </View>
+        <Loading size="small" message="Loading more messages..." />
       ) : null,
     [isLoadingMore]
   );
 
+  const renderEmptyComponent = useCallback(
+    () => <Loading size="large" message="No messages yet" />,
+    []
+  );
+
   if (!isInitialized) {
-    return (
-      <View style={{ backgroundClip: "red", flex: 1 }}>
-        <ActivityIndicator />
-      </View>
-    );
+    return <Loading fullscreen size="large" message="Loading messages..." />;
   }
 
   return (
@@ -70,6 +70,7 @@ export const MessageList: React.FC = () => {
         onEndReached={loadMoreMessages}
         onEndReachedThreshold={0.5}
         ListFooterComponent={renderFooter}
+        ListEmptyComponent={renderEmptyComponent}
       />
       <ImagePreview
         visible={isPreviewVisible}
@@ -83,13 +84,5 @@ export const MessageList: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  text: {
-    fontSize: 16,
-    color: "#000",
-  },
-  loaderContainer: {
-    padding: 16,
-    alignItems: "center",
   },
 });

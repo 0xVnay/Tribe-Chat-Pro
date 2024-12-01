@@ -34,9 +34,28 @@ type TMessage = {
   updatedAt: number;
 };
 
+interface TMention {
+  id: string;
+  name: string;
+  startIndex: number;
+  endIndex: number;
+}
+
+interface TMentionData {
+  isActive: boolean;
+  query: string;
+  startIndex: number;
+}
+
+interface TInputPosition {
+  height: number;
+  maxHeight: number;
+}
+
 interface TMessageWithUI extends TMessage {
   showHeader?: boolean;
   replyParticipant?: TParticipant;
+  mentions?: TMention[];
 }
 
 type TListItemBase = {
